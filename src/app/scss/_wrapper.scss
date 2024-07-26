@@ -1,0 +1,26 @@
+.main {
+    &-wrapper {
+        position: relative;
+        display: flex;
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: $sideblk;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: $header;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: $clr5;
+}

@@ -1,0 +1,30 @@
+.textEditable {
+
+    .heading,
+    .pra {
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        cursor: pointer;
+
+        &:focus {
+            cursor: move;
+        }
+    }
+
+    .pra {
+        top: 50%
+    }
+}
+
+
+
+
+.rCS1s34yp2 .moveable-control.moveable-origin {
+    border-color: transparent !important;
+    background-color: transparent !important;
+}

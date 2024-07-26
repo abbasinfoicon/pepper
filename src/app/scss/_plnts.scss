@@ -1,0 +1,87 @@
+.plnts {
+
+    &-img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        animation: rotate 9s linear;
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+        transition-duration: 5s;
+        transform-origin: 0 0;
+        transform: rotate(359deg) translate(-50%, -50%);
+
+        &.mercury {
+            width: 105px;
+            height: 105px;
+            
+            img {
+                width: 23px;
+            }
+        }
+
+        &.venus {
+            width: 150px;
+            height: 150px;
+            
+            img {
+                width: 32px;
+            }
+        }
+
+        &.earth {
+            width: 215px;
+            height: 215px;
+            
+            img {
+                width: 43px;
+            }
+        }
+
+        &.mars {
+            width: 250px;
+            height: 250px;
+            
+            img {
+                width: 29px;
+            }
+        }
+
+        &.jupiter {
+            width: 370px;
+            height: 370px;
+            
+            img {
+                width: 77px;
+            }
+        }
+
+        &.saturn {
+            width: 480px;
+            height: 480px;
+            
+            img {
+                width: 127px;
+            }
+        }
+
+        &.uranus {
+            width: 540px;
+            height: 540px;
+            
+            img {
+                width: 67px;
+            }
+        }
+
+        &.neptune {
+            width: 600px;
+            height: 600px;
+            
+            img {
+                width: 58px;
+            }
+        }
+    }
+}
+
+@import './plntsKeyframes'

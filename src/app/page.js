@@ -1,113 +1,243 @@
-import Image from "next/image";
+'use client'
+import Header from "@/components/Header";
+import ModalInfo from "@/components/ModalInfo";
+import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
+import { Circles } from "react-loader-spinner";
+import Moveable from "react-moveable";
+
+const circleImageSources = {
+  brown: "/img/brown.png",
+  white: "/img/white.png",
+  green: "/img/green.png",
+  blue: "/img/blue.png",
+  skyblue: "/img/skyblue.png"
+};
+
+const initialCircleState = {
+  basic: true,
+  meTime: false,
+  taBoard: false,
+  route: false,
+};
+
+const generateCircles = (src, count) => (
+  Array.from({ length: count }, (_, index) => (
+    <div className={`circle circle${index}`} key={index}>
+      <img src={src} alt="" className="img-fluid" />
+    </div>
+  ))
+);
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+  const [loading, setLoading] = useState(true);
+  const [scale, setScale] = useState(50);
+  const [view, setView] = useState(initialCircleState);
+  const [textarea, setTextarea] = useState('');
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleShow = () => {
+    document.getElementById('modalInfo').classList.add("show");
+  };
+
+  const resetAll = () => {
+    setScale(50);
+    setView(initialCircleState);
+    clearAllTextareas();
+    document.querySelectorAll('.circle').forEach(circle => {
+      circle.style.transform = '';
+    });
+  };
+
+  const handleViewChange = (viewType) => {
+    setView({ basic: false, [viewType]: true });
+    clearAllTextareas();
+    document.querySelectorAll('.circle').forEach(circle => {
+      circle.style.transform = '';
+    });
+  };
+
+  const clearAllTextareas = () => {
+    if (textareaRef.current) {
+      textareaRef.current.value = "";
+    }
+    document.querySelectorAll('textarea').forEach(textarea => {
+      textarea.value = "";
+    });
+  };
+
+  if (loading) {
+    return <Circles
+      height="80"
+      width="80"
+      color="#4fa94d"
+      ariaLabel="circles-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+      visible={true}
+    />;
+  }
+
+  const circleBrown = generateCircles(circleImageSources.brown, 10);
+  const circleWhite = generateCircles(circleImageSources.white, 10);
+  const circleGreen = generateCircles(circleImageSources.green, 10);
+  const circleBlue = generateCircles(circleImageSources.blue, 10);
+  const circleSkyBlue = generateCircles(circleImageSources.skyblue, 10);
+
+  const sections = Array.from({ length: 9 }, (_, index) => (
+    <div className="col-md-4 relative" key={index}>
+      <div className="Bord_GD-section text-center">
+        <div className="img-style">
+          <img src="/img/circle.png" alt="" className="img-fluid m-auto" />
+        </div>
+        <div className="text-style">
+          <textarea ref={textareaRef} onChange={(e) => setTextarea(e.target.value)} placeholder="Touch to type"></textarea>
         </div>
       </div>
+    </div>
+  ));
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+  return (
+    <main className="main">
+      <Header />
+      <div className="main-wrapper">
+        <div className="sidebar">
+          <div className="sidebar_left">
+            <ul>
+              <li><Link href='/'><img src="/img/live.png" alt="live" className="img-fluid" /></Link></li>
+              <li><Link href='/'><img src="/img/microphone.png" alt="microphone" className="img-fluid" /></Link></li>
+            </ul>
+            <button className='infoicon' onClick={handleShow}><img src="assets/img/info-white.svg" alt="info" className="img-fluid" /></button>
+          </div>
+        </div>
+        <div className="main-wrapper-content">
+          <div className="row content">
+            <div className="col-lg-8 content_editable">
+              <div className="img-full" style={{ transform: `scale(${scale / 100 * 2})` }}>
+                <div className="bepper left">
+                  <div className={`bepper-bx brown ${view.basic || view.meTime ? 'show' : 'hide'}`}>
+                    <div className="first">{circleBrown}</div>
+                    <div className="second">{circleBrown}</div>
+                  </div>
+                  <div className="flex gap-4 justify-end">
+                    <div className={`bepper-bx white ${view.basic || view.route ? 'show' : 'hide'}`}>
+                      <div className="first">{circleWhite}</div>
+                      <div className="second">{circleWhite}</div>
+                    </div>
+                    <div className={`bepper-bx brown ${view.route ? 'show' : 'hide'}`}>
+                      <div className="first">{circleBlue}</div>
+                      <div className="second">{circleBlue}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="Bord_GD" style={{ backgroundImage: `url(/img/${view.taBoard ? 'wood-bg3' : 'wood-bg'}.jpg)` }}>
+                  <div className={`row ${view.route ? 'arrow' : ''}`}>
+                    <div className={`col-md-12 h-76px ${view.taBoard ? 'taBoard' : ''}`}>
+                      {
+                        view.taBoard ?
+                          <div className="row text-center">
+                            <div className="col-md-4"><h3>Child</h3></div>
+                            <div className="col-md-4"><h3>Adult</h3></div>
+                            <div className="col-md-4"><h3>OtherAdult</h3></div>
+                          </div> :
+                          <div className="Bord_GD-section text-center">
+                            <div className="textarea-style">
+                              <textarea ref={textareaRef} placeholder="Touch this text to type your main question here"></textarea>
+                            </div>
+                          </div>
+                      }
+                    </div>
+
+                    {sections}
+                  </div>
+
+                  <div className={`bepper-bx cntr skyblue ${view.meTime || view.taBoard ? 'show' : 'hide'}`}>
+                    <div className="first">{circleSkyBlue}</div>
+                    <div className="second">{circleSkyBlue}</div>
+                  </div>
+
+                  <div className={`bepper-bx cntr white ${view.taBoard ? 'show' : 'hide'}`}>
+                    <div className="first">{circleWhite}</div>
+                    <div className="second">{circleWhite}</div>
+                  </div>
+                </div>
+
+                <div className="bepper right">
+                  <div className="flex gap-4">
+                    <div className={`bepper-bx green ${view.basic || view.meTime || view.route ? 'show' : 'hide'}`}>
+                      <div className="first">{circleGreen}</div>
+                      <div className="second">{circleGreen}</div>
+                    </div>
+                    <div className={`bepper-bx brown ${view.route ? 'show' : 'hide'}`}>
+                      <div className="first">{circleBrown}</div>
+                      <div className="second">{circleBrown}</div>
+                    </div>
+                    <div className={`bepper-bx brown ${view.taBoard ? 'show' : 'hide'}`}>
+                      <div className="first">{circleBlue}</div>
+                      <div className="second">{circleBlue}</div>
+                    </div>
+                  </div>
+
+                  <p className="text-green-700 filter-none">
+                    {view.basic && 'Basic'}
+                    {view.meTime && 'Me Time'}
+                    {view.taBoard && 'TA'}
+                    {view.route && 'Route'} Board
+                  </p>
+                </div>
+
+                <Moveable
+                  target={".circle"}
+                  individualGroupable={true}
+                  draggable={true}
+                  throttleDrag={1}
+                  edgeDraggable={false}
+                  startDragRotate={0}
+                  throttleDragRotate={0}
+                  preventDefault={false}
+                  onDrag={e => {
+                    e.target.style.transform = e.transform;
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="content_fixed">
+            <ul>
+              <li className='clrbox'>
+                <span className="circle clr clr1"><img src="/img/white.png" alt="" className="img-fluid" /></span>
+                <span className="circle clr clr2"><img src="/img/yellow.png" alt="" className="img-fluid" /></span>
+              </li>
+            </ul>
+            <ul>
+              <li className={`undo ${view.basic ? 'active' : ''}`}><button onClick={() => handleViewChange('basic')}>Basic</button></li>
+              <li className={`undo ${view.meTime ? 'active' : ''}`}><button onClick={() => handleViewChange('meTime')}>Me Time</button></li>
+              <li className={`undo ${view.taBoard ? 'active' : ''}`}><button onClick={() => handleViewChange('taBoard')}>TA Board</button></li>
+              <li className={`undo ${view.route ? 'active' : ''}`}><button onClick={() => handleViewChange('route')}>Route</button></li>
+            </ul>
+            <div className="reset-zoom">
+              <div className="reset">
+                <p onClick={resetAll}>reset <img src="assets/img/reset.svg" alt="reset" className="img-fluid" /></p>
+              </div>
+              <div className="zoom">
+                <p>zoom</p>
+                <input type="range" min="10" max="50" value={scale} onChange={e => setScale(parseInt(e.target.value, 10))} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <ModalInfo />
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </main >
   );
 }

@@ -1,0 +1,33 @@
+.full-eventWrapper {
+
+    .header,
+    .footer {
+        a {
+            color: $white;
+            background: $sideblk;
+            display: block;
+            padding: 23px;
+            font-size: 1rem;
+        }
+    }
+
+    .content {
+        height: calc(100vh - 140px);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        overflow-y: auto;
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+
+            p {
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+}
