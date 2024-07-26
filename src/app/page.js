@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { Circles } from "react-loader-spinner";
 import Moveable from "react-moveable";
+import html2canvas from 'html2canvas';
 
 const circleImageSources = {
   brown: "/img/brown.png",
@@ -35,6 +36,7 @@ export default function Home() {
   const [view, setView] = useState(initialCircleState);
   const [textarea, setTextarea] = useState('');
   const textareaRef = useRef(null);
+  const captureRef = useRef(null); // Ref to capture the section
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,6 +76,17 @@ export default function Home() {
     });
   };
 
+  const handleCapture = () => {
+    if (captureRef.current) {
+      html2canvas(captureRef.current).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL();
+        link.download = 'captured-section.png';
+        link.click();
+      });
+    }
+  };
+
   if (loading) {
     return <Circles
       height="80"
@@ -92,22 +105,10 @@ export default function Home() {
   const circleBlue = generateCircles(circleImageSources.blue, 10);
   const circleSkyBlue = generateCircles(circleImageSources.skyblue, 10);
 
-  const sections = Array.from({ length: 9 }, (_, index) => (
-    <div className="col-md-4 relative" key={index}>
-      <div className="Bord_GD-section text-center">
-        <div className="img-style">
-          <img src="/img/circle.png" alt="" className="img-fluid m-auto" />
-        </div>
-        <div className="text-style">
-          <textarea ref={textareaRef} onChange={(e) => setTextarea(e.target.value)} placeholder="Touch to type"></textarea>
-        </div>
-      </div>
-    </div>
-  ));
-
   return (
     <main className="main">
-      <Header />
+      <Header handleCapture={handleCapture} />
+
       <div className="main-wrapper">
         <div className="sidebar">
           <div className="sidebar_left">
@@ -139,7 +140,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="Bord_GD" style={{ backgroundImage: `url(/img/${view.taBoard ? 'wood-bg3' : 'wood-bg'}.jpg)` }}>
+                <div className="Bord_GD" style={{ backgroundImage: `url(/img/${view.taBoard ? 'wood-bg3' : 'wood-bg'}.jpg)` }} ref={captureRef}>
                   <div className={`row ${view.route ? 'arrow' : ''}`}>
                     <div className={`col-md-12 h-76px ${view.taBoard ? 'taBoard' : ''}`}>
                       {
@@ -157,7 +158,18 @@ export default function Home() {
                       }
                     </div>
 
-                    {sections}
+                    {Array.from({ length: 9 }, (_, index) => (
+                      <div className="col-md-4 relative" key={index}>
+                        <div className="Bord_GD-section text-center">
+                          <div className="img-style">
+                            <img src="/img/circle.png" alt="" className="img-fluid m-auto" />
+                          </div>
+                          <div className="text-style">
+                            <textarea ref={textareaRef} onChange={(e) => setTextarea(e.target.value)} placeholder="Touch to type"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   <div className={`bepper-bx cntr skyblue ${view.meTime || view.taBoard ? 'show' : 'hide'}`}>
@@ -238,6 +250,6 @@ export default function Home() {
         </div>
         <ModalInfo />
       </div>
-    </main >
+    </main>
   );
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-const Header = () => {
+const Header = ({ handleCapture }) => {
     return (
         <div className="main-header">
             <div className="container-fluid">
@@ -14,7 +14,7 @@ const Header = () => {
 
                     <div className="col-md-6">
                         <div className="inline-button flex items-center justify-end">
-                            <button className="btn-download"><img src="/img/download.svg" alt="download" className="img-fluid" /> Download</button>
+                            <button className="btn-download" onClick={handleCapture}><img src="/img/download.svg" alt="download" className="img-fluid" /> Download</button>
                         </div>
                     </div>
                 </div>
