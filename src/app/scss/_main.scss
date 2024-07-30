@@ -15,7 +15,7 @@
 .content {
     &_editable {
         // height: calc(100vh - 100px);
-        width: 62%;
+        width: 72%;
 
         .img-full {
             filter: drop-shadow(0 25px 25px rgb(0 0 0/0.15));
@@ -465,7 +465,7 @@
 
             &.white {
                 top: auto;
-                left: 40px;
+                left: 80px;
                 bottom: 66px;
                 transform: none;
 
@@ -508,9 +508,10 @@
 
 
 .Bord_GD {
-    width: 800px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
+    background-size: cover;
 
     &.bg-border {
         position: relative;
